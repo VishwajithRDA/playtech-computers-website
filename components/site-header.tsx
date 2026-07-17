@@ -1,7 +1,10 @@
 "use client"
 
+import Link from "next/link"
 import { Search, ShoppingCart, MapPin, Phone, Clock, ChevronDown, Menu } from "lucide-react"
 import { STORE_INFO, type Category } from "@/lib/catalog-data"
+import { AccountControl } from "@/components/account-control"
+import { NAV_LINKS } from "@/components/site-nav"
 import { cn } from "@/lib/utils"
 
 export function SiteHeader({
@@ -36,13 +39,27 @@ export function SiteHeader({
               {STORE_INFO.hours}
             </span>
           </div>
-          <a
-            href={`tel:${STORE_INFO.phone.replace(/\s/g, "")}`}
-            className="inline-flex items-center gap-1.5 font-medium text-foreground transition-colors hover:text-primary"
-          >
-            <Phone className="h-3.5 w-3.5 text-accent" />
-            {STORE_INFO.phone}
-          </a>
+          <div className="flex items-center gap-4">
+            <nav className="flex items-center gap-3">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="font-medium text-muted-foreground transition-colors hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <span className="h-3.5 w-px bg-border" aria-hidden="true" />
+            <a
+              href={`tel:${STORE_INFO.phone.replace(/\s/g, "")}`}
+              className="inline-flex items-center gap-1.5 font-medium text-foreground transition-colors hover:text-primary"
+            >
+              <Phone className="h-3.5 w-3.5 text-accent" />
+              {STORE_INFO.phone}
+            </a>
+          </div>
         </div>
       </div>
 
@@ -106,11 +123,25 @@ export function SiteHeader({
             {cartCount}
           </span>
         </button>
+
+        <AccountControl />
       </div>
 
       {/* Category dropdown map row */}
       <nav className="border-t border-border/60 bg-card/30">
         <div className="mx-auto flex max-w-[1600px] items-center gap-1 overflow-x-auto px-4 py-1.5 lg:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-1 md:hidden">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="shrink-0 rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <span className="mx-1 h-4 w-px shrink-0 bg-border" aria-hidden="true" />
+          </div>
           <button
             type="button"
             onClick={() => onSelectCategory(null)}
