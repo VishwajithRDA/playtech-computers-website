@@ -47,9 +47,34 @@ export function useCatalog() {
     setCart((prev) => ({ ...prev, [product.id]: (prev[product.id] ?? 0) + 1 }))
   }, [])
 
+  const removeFromCart = useCallback((productId: string) => {
+    setCart((prev) => {
+      const next = { ...prev }
+      delete next[productId]
+      return next
+    })
+  }, [])
+
   const cartCount = useMemo(
     () => Object.values(cart).reduce((sum, n) => sum + n, 0),
     [cart],
+  )
+
+  /** Resolve raw cart entries into full product line items for the UI. */
+  const cartItems = useMemo(
+    () =>
+      Object.entries(cart)
+        .map(([id, qty]) => {
+          const product = PRODUCTS.find((p) => p.id === id)
+          return product ? { product, qty } : null
+        })
+        .filter((item): item is { product: Product; qty: number } => item !== null),
+    [cart],
+  )
+
+  const cartSubtotal = useMemo(
+    () => cartItems.reduce((sum, { product, qty }) => sum + (product.priceLKR ?? 0) * qty, 0),
+    [cartItems],
   )
 
   return {
@@ -64,6 +89,9 @@ export function useCatalog() {
     setSort,
     cart,
     cartCount,
+    cartItems,
+    cartSubtotal,
     addToCart,
+    removeFromCart,
   }
 }

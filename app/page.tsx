@@ -9,11 +9,13 @@ import { SiteHeader } from "@/components/site-header"
 import { CategorySidebar } from "@/components/category-sidebar"
 import { ProductGrid } from "@/components/product-grid"
 import { ProductModal } from "@/components/product-modal"
+import { CartDrawer } from "@/components/cart-drawer"
 
 export default function Page() {
   const catalog = useCatalog()
   const [selected, setSelected] = useState<Product | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [cartOpen, setCartOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-background">
@@ -25,6 +27,7 @@ export default function Page() {
         activeCategory={catalog.activeCategory}
         onSelectCategory={catalog.setActiveCategory}
         onToggleSidebar={() => setSidebarOpen(true)}
+        onOpenCart={() => setCartOpen(true)}
       />
 
       <div className="mx-auto flex max-w-[1600px] gap-6 px-4 py-6 lg:px-6">
@@ -128,6 +131,14 @@ export default function Page() {
         product={selected}
         onClose={() => setSelected(null)}
         onAddToCart={catalog.addToCart}
+      />
+
+      <CartDrawer
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        items={catalog.cartItems}
+        subtotal={catalog.cartSubtotal}
+        onRemove={catalog.removeFromCart}
       />
     </div>
   )

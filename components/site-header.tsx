@@ -15,6 +15,7 @@ export function SiteHeader({
   activeCategory,
   onSelectCategory,
   onToggleSidebar,
+  onOpenCart,
 }: {
   query: string
   onQueryChange: (v: string) => void
@@ -23,6 +24,7 @@ export function SiteHeader({
   activeCategory: string | null
   onSelectCategory: (id: string | null) => void
   onToggleSidebar: () => void
+  onOpenCart: () => void
 }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
@@ -109,6 +111,7 @@ export function SiteHeader({
         {/* Cart */}
         <button
           type="button"
+          onClick={onOpenCart}
           className="relative inline-flex h-11 shrink-0 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
           aria-label={`Shopping cart, ${cartCount} items`}
         >
