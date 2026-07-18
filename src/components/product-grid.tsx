@@ -1,9 +1,9 @@
 "use client"
 
 import { SearchX } from "lucide-react"
-import { CATEGORIES, type Product } from "@/lib/catalog-data"
-import type { SortOption } from "@/hooks/use-catalog"
-import { ProductCard } from "@/components/product-card"
+import { CATEGORIES, type Product } from "../lib/catalog-data"
+import type { SortOption } from "../hooks/use-catalog"
+import { ProductCard } from "../components/product-card"
 
 const SORT_LABELS: { value: SortOption; label: string }[] = [
   { value: "featured", label: "Featured" },

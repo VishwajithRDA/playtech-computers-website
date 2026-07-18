@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Award, ShieldCheck, Cpu, Truck, Headset, MapPin } from "lucide-react"
-import { STORE_INFO } from "@/lib/catalog-data"
-import { SiteNav, SiteFooter } from "@/components/site-nav"
+import { STORE_INFO } from "../../lib/catalog-data"
+import { SiteNav, SiteFooter } from "../../components/site-nav"
 
 export const metadata: Metadata = {
   title: `About Us — ${STORE_INFO.name}`,
@@ -28,10 +28,10 @@ const PILLARS = [
 ]
 
 const STATS = [
-  { value: "10+", label: "Years in business" },
+  { value: "3+", label: "Years in business" },
   { value: "50k+", label: "Components delivered" },
   { value: "100%", label: "Genuine agent stock" },
-  { value: "4", label: "Branches island-wide" },
+  { value: "1", label: "Branches island-wide" },
 ]
 
 const COMMITMENTS = [
@@ -52,7 +52,7 @@ export default function AboutPage() {
             About {STORE_INFO.name}
           </span>
           <h1 className="max-w-3xl font-display text-3xl font-extrabold leading-tight tracking-tight text-foreground text-balance sm:text-5xl">
-            The people behind Sri Lanka&apos;s No.1 IT partner.
+            The people behind Sri Lanka&apos;s Elevate your Digital Experience.
           </h1>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             {STORE_INFO.name} is more than a hardware store. We are builders, gamers and engineers

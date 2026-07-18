@@ -1,9 +1,9 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
-import { AuthProvider } from '@/components/auth-provider'
-import { AuthModal } from '@/components/auth-modal'
 import './globals.css'
+import { AuthProvider } from '../components/auth-provider'
+import { AuthModal } from '../components/auth-modal'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: 'Playtech — No.1 IT Partner in Sri Lanka',
+  title: 'Playtech | Elevate your Digital Experience',
   description:
     'Playtech — buy laptops, desktops, processors, motherboards, RAM, storage, casings and cooling in Sri Lanka. Best prices in LKR with island-wide delivery.',
   generator: 'v0.app',

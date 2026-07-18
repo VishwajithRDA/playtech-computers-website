@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { X, ShieldCheck, Truck, Tag } from "lucide-react"
-import { STORE_INFO } from "@/lib/catalog-data"
-import { useAuth } from "@/components/auth-provider"
-import { GoogleIcon } from "@/components/google-icon"
+import { STORE_INFO } from "../lib/catalog-data"
+import { useAuth } from "../components/auth-provider"
+import { GoogleIcon } from "../components/google-icon"
 
 /**
  * Global, dismissible sign-in prompt. Renders on top of any page for anonymous

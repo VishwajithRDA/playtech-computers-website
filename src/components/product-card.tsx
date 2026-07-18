@@ -1,10 +1,10 @@
 "use client"
 
 import { MessageCircle, Star, Plus } from "lucide-react"
-import { STORE_INFO, type Product } from "@/lib/catalog-data"
-import { CATEGORIES } from "@/lib/catalog-data"
-import { formatLKR } from "@/lib/format"
-import { StockBadge } from "@/components/stock-badge"
+import { STORE_INFO, type Product } from "../lib/catalog-data"
+import { CATEGORIES } from "../lib/catalog-data"
+import { formatLKR } from "../lib/format"
+import { StockBadge } from "./stock-badge"
 
 function whatsappHref(product: Product) {
   const msg = `Hi ${STORE_INFO.name}, I'd like to inquire about the *${product.name}* (${product.shortSpec}). Is it available?`

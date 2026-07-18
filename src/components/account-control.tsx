@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { LogOut } from "lucide-react"
-import { useAuth } from "@/components/auth-provider"
-import { GoogleIcon } from "@/components/google-icon"
-import { cn } from "@/lib/utils"
+import { useAuth } from "../components/auth-provider"
+import { GoogleIcon } from "../components/google-icon"
+import { cn } from "../lib/utils"
 
 /** Header account widget: Google sign-in button or signed-in avatar menu. */
 export function AccountControl({ className }: { className?: string }) {

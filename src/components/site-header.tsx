@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import { Search, ShoppingCart, MapPin, Phone, Clock, ChevronDown, Menu } from "lucide-react"
-import { STORE_INFO, type Category } from "@/lib/catalog-data"
-import { AccountControl } from "@/components/account-control"
-import { NAV_LINKS } from "@/components/site-nav"
-import { cn } from "@/lib/utils"
+import { STORE_INFO, type Category } from "../lib/catalog-data"
+import { AccountControl } from "../components/account-control"
+import { NAV_LINKS } from "../components/site-nav"
+import { cn } from "../lib/utils"
 
 export function SiteHeader({
   query,
@@ -78,11 +78,11 @@ export function SiteHeader({
 
         {/* Logo */}
         <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label={`${STORE_INFO.name} home`}>
-          <img
+          {/* <img
             src="/brand/playtech-icon.png"
             alt=""
             className="h-9 w-9 shrink-0 object-contain"
-          />
+          /> */}
           <span className="hidden leading-tight sm:block">
             <img
               src="/brand/playtech-logo.png"

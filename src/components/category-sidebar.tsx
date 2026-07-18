@@ -14,8 +14,8 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react"
-import { STORE_INFO, type Category } from "@/lib/catalog-data"
-import { cn } from "@/lib/utils"
+import { STORE_INFO, type Category } from "../lib/catalog-data"
+import { cn } from "../lib/utils"
 
 const ICONS: Record<string, LucideIcon> = {
   Laptop,

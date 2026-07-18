@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState, useCallback } from "react"
-import { PRODUCTS, CATEGORIES, type Product } from "@/lib/catalog-data"
+import { PRODUCTS, CATEGORIES, type Product } from "../lib/catalog-data"
 
 export type SortOption = "featured" | "price-asc" | "price-desc" | "name"
 

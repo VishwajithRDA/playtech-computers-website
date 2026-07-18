@@ -3,9 +3,9 @@
 import { useEffect } from "react"
 import Link from "next/link"
 import { X, Trash2, ShoppingCart, ArrowRight } from "lucide-react"
-import type { Product } from "@/lib/catalog-data"
-import { formatLKR } from "@/lib/format"
-import { cn } from "@/lib/utils"
+import type { Product } from "../lib/catalog-data"
+import { formatLKR } from "../lib/format"
+import { cn } from "../lib/utils"
 
 export interface CartLineItem {
   product: Product

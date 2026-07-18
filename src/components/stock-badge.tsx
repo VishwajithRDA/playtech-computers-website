@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils"
-import type { StockStatus } from "@/lib/catalog-data"
+import { cn } from "../lib/utils"
+import type { StockStatus } from "../lib/catalog-data"
 
 const CONFIG: Record<StockStatus, { label: string; dot: string; classes: string }> = {
   "in-stock": {

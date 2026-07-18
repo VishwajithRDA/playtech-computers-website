@@ -3,9 +3,9 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { MapPin, Clock, Phone } from "lucide-react"
-import { STORE_INFO } from "@/lib/catalog-data"
-import { AccountControl } from "@/components/account-control"
-import { cn } from "@/lib/utils"
+import { STORE_INFO } from "../lib/catalog-data"
+import { AccountControl } from "../components/account-control"
+import { cn } from "../lib/utils"
 
 export const NAV_LINKS = [
   { href: "/", label: "Home" },

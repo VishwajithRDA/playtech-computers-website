@@ -3,11 +3,11 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import { CheckCircle2, ShieldCheck, Lock, PartyPopper } from "lucide-react"
-import { PRODUCTS, STORE_INFO } from "@/lib/catalog-data"
-import { formatLKR } from "@/lib/format"
-import { SiteNav, SiteFooter } from "@/components/site-nav"
-import { useAuth } from "@/components/auth-provider"
-import { GoogleIcon } from "@/components/google-icon"
+import { PRODUCTS, STORE_INFO } from "../../lib/catalog-data"
+import { formatLKR } from "../../lib/format"
+import { SiteNav, SiteFooter } from "../../components/site-nav"
+import { useAuth } from "../../components/auth-provider"
+import { GoogleIcon } from "../../components/google-icon"
 
 // Demo order — in a real app these line items would come from the shared cart.
 const ORDER_ITEMS = [

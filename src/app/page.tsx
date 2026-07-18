@@ -2,14 +2,14 @@
 
 import { useState } from "react"
 import { Truck, ShieldCheck, Headset } from "lucide-react"
-import { useCatalog } from "@/hooks/use-catalog"
-import type { Product } from "@/lib/catalog-data"
-import { STORE_INFO } from "@/lib/catalog-data"
-import { SiteHeader } from "@/components/site-header"
-import { CategorySidebar } from "@/components/category-sidebar"
-import { ProductGrid } from "@/components/product-grid"
-import { ProductModal } from "@/components/product-modal"
-import { CartDrawer } from "@/components/cart-drawer"
+import { useCatalog } from "../hooks/use-catalog"
+import type { Product } from "../lib/catalog-data"
+import { STORE_INFO } from "../lib/catalog-data"
+import { SiteHeader } from "../components/site-header"
+import { CategorySidebar } from "../components/category-sidebar"
+import { ProductGrid } from "../components/product-grid"
+import { ProductModal } from "../components/product-modal"
+import { CartDrawer } from "../components/cart-drawer"
 
 export default function Page() {
   const catalog = useCatalog()

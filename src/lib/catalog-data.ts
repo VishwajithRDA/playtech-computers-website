@@ -52,9 +52,9 @@ export interface StoreInfo {
 
 export const STORE_INFO: StoreInfo = {
   name: "Playtech",
-  tagline: "No.1 IT Partner in Sri Lanka",
-  phone: "+94 37 224 5678",
-  whatsapp: "94372245678",
+  tagline: "Elevate your Digital Experience",
+  phone: "+94 71 75 75 240",
+  whatsapp: "94717575240",
   address: "No 63, Hettipola Road, Kuliyapitiya, Sri Lanka",
   hours: "Mon–Sat · 9.00 AM – 7.00 PM",
   email: "sales@playtech.lk",
