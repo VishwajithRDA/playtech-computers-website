@@ -1,0 +1,16 @@
+
+
+cd /mdev/playtech_front_end
+docker build -t playtech-frontend .
+
+docker stop playtech-web
+docker rm playtech-web
+docker run -d -p 8001:3000 --restart=on-failure --name playtech-web playtech-frontend
+
+
+docker ps
+docker cp /mdev/playtech_front_end/public/sitemap.xml 18befa0a3190:/app/public/sitemap.xml
+
+
+docker system df
+docker system prune -a --volumes

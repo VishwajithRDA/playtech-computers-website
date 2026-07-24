@@ -1,11 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  output: "standalone",
+  compress: true,
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "www.playtech.lk",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      }
+    ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 import { MapPin, Clock, Phone, Mail, MessageCircle } from "lucide-react"
-import { STORE_INFO } from "@/lib/catalog-data"
-import { SiteNav, SiteFooter } from "@/components/site-nav"
-import { ContactForm } from "@/components/contact-form"
+import { STORE_INFO } from "../../lib/catalog-data"
+import { SiteNav, SiteFooter } from "../../components/site-nav"
+import { ContactForm } from "../../components/contact-form"
 
 export const metadata: Metadata = {
   title: `Contact Us — ${STORE_INFO.name}`,
