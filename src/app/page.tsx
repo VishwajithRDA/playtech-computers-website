@@ -13,6 +13,7 @@ import { CartDrawer } from "../components/cart-drawer"
 
 export default function Page() {
   const catalog = useCatalog()
+  const [allProducts, setAllProducts] = useState<Product[]>([])
   const [selected, setSelected] = useState<Product | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
