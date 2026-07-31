@@ -114,7 +114,7 @@ export default function Page() {
         <div className="mx-auto flex max-w-[1600px] flex-col gap-2 px-4 py-6 text-sm text-muted-foreground lg:flex-row lg:items-center lg:justify-between lg:px-6">
           <p className="inline-flex items-center gap-2">
             <img
-              src="/brand/playtech-logo.png"
+              src="https://playtech.lk/uploads/brand/playtech-logo.png"
               alt={STORE_INFO.name}
               className="h-4 w-auto object-contain"
             />

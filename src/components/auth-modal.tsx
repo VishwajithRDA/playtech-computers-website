@@ -2,33 +2,25 @@
 
 import { useEffect, useState } from "react"
 import { X, ShieldCheck, Truck, Tag } from "lucide-react"
+import { GoogleLogin } from "@react-oauth/google"
 import { STORE_INFO } from "../lib/catalog-data"
 import { useAuth } from "../components/auth-provider"
-import { GoogleIcon } from "../components/google-icon"
 
-/**
- * Global, dismissible sign-in prompt. Renders on top of any page for anonymous
- * visitors shortly after load. It never blocks browsing — the user can close it
- * and keep exploring the catalog.
- */
 export function AuthModal() {
-  const { isAuthenticated, ready, signInWithGoogle, signingIn } = useAuth()
+  const { isAuthenticated, ready, verifyGoogleToken, signingIn } = useAuth()
   const [open, setOpen] = useState(false)
   const [dismissed, setDismissed] = useState(false)
 
-  // Gently invite anonymous visitors after the session state is known.
   useEffect(() => {
     if (!ready || isAuthenticated || dismissed) return
     const t = setTimeout(() => setOpen(true), 1200)
     return () => clearTimeout(t)
   }, [ready, isAuthenticated, dismissed])
 
-  // Close automatically once the visitor signs in.
   useEffect(() => {
     if (isAuthenticated) setOpen(false)
   }, [isAuthenticated])
 
-  // Lock background scroll while open.
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
     return () => {
@@ -50,7 +42,6 @@ export function AuthModal() {
       aria-labelledby="auth-modal-title"
       className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center"
     >
-      {/* Backdrop */}
       <button
         type="button"
         aria-label="Dismiss sign-in prompt"
@@ -58,7 +49,6 @@ export function AuthModal() {
         className="absolute inset-0 bg-background/80 backdrop-blur-sm"
       />
 
-      {/* Panel */}
       <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
         <button
           type="button"
@@ -101,23 +91,25 @@ export function AuthModal() {
             </li>
           </ul>
 
-          <button
-            type="button"
-            onClick={() => void signInWithGoogle()}
-            disabled={signingIn}
-            className="inline-flex h-12 w-full items-center justify-center gap-3 rounded-lg bg-foreground px-4 text-sm font-semibold text-background transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {signingIn ? (
-              "Signing in..."
-            ) : (
-              <>
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-background">
-                  <GoogleIcon />
-                </span>
-                Sign in with Google
-              </>
-            )}
-          </button>
+          {signingIn ? (
+            <div className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-foreground text-sm font-semibold text-background opacity-60">
+              Authenticating...
+            </div>
+          ) : (
+            <div className="flex w-full justify-center">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  if (credentialResponse.credential) {
+                    void verifyGoogleToken(credentialResponse.credential)
+                  }
+                }}
+                onError={() => console.error("Google Login Failed")}
+                size="large"
+                width="100%"
+                theme="filled_black"
+              />
+            </div>
+          )}
 
           <button
             type="button"

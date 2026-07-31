@@ -1,6 +1,6 @@
-
 import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import './globals.css'
 import { AuthProvider } from '../components/auth-provider'
 import { AuthModal } from '../components/auth-modal'
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     'Playtech — buy laptops, desktops, processors, motherboards, RAM, storage, casings and cooling in Sri Lanka. Best prices in LKR with island-wide delivery.',
   generator: 'v0.app',
   icons: {
-    icon: '/brand/playtech-icon.png',
-    apple: '/brand/playtech-icon.png',
+    icon: 'https://playtech.lk/uploads/brand/playtech-icon.png',
+    apple: 'https://playtech.lk/uploads/brand/playtech-icon.png',
   },
 }
 
@@ -41,11 +41,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} bg-background`}>
       <body className="font-sans antialiased">
-        <AuthProvider>
-          {children}
-          <AuthModal />
-        </AuthProvider>
-        {process.env.NODE_ENV === 'production'}
+        {/* GoogleOAuthProvider wraps the app. It securely utilizes your public Client ID */}
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''}>
+          <AuthProvider>
+            {children}
+            <AuthModal />
+          </AuthProvider>
+        </GoogleOAuthProvider>
+        {process.env.NODE_ENV === 'production' ? null : null}
       </body>
     </html>
   )

@@ -2,31 +2,37 @@
 
 import { useState } from "react"
 import { LogOut } from "lucide-react"
+import { GoogleLogin } from "@react-oauth/google"
 import { useAuth } from "../components/auth-provider"
-import { GoogleIcon } from "../components/google-icon"
 import { cn } from "../lib/utils"
 
-/** Header account widget: Google sign-in button or signed-in avatar menu. */
 export function AccountControl({ className }: { className?: string }) {
-  const { user, isAuthenticated, signInWithGoogle, signOut, signingIn } = useAuth()
+  const { user, isAuthenticated, verifyGoogleToken, signOut, signingIn } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
 
   if (!isAuthenticated) {
     return (
-      <button
-        type="button"
-        onClick={() => void signInWithGoogle()}
-        disabled={signingIn}
-        className={cn(
-          "inline-flex h-11 shrink-0 items-center gap-2 rounded-lg bg-foreground px-3 text-sm font-semibold text-background transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60",
-          className,
+      <div className={cn("shrink-0 items-center overflow-hidden rounded-lg", className)}>
+        {signingIn ? (
+          <span className="inline-flex h-11 items-center justify-center px-4 rounded-lg bg-foreground text-sm font-semibold text-background opacity-60">
+            Signing in...
+          </span>
+        ) : (
+          <GoogleLogin
+            onSuccess={(credentialResponse) => {
+              if (credentialResponse.credential) {
+                void verifyGoogleToken(credentialResponse.credential)
+              }
+            }}
+            onError={() => {
+              console.error('Google Login Failed')
+            }}
+            type="standard"
+            theme="filled_black"
+            shape="rectangular"
+          />
         )}
-      >
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-background">
-          <GoogleIcon className="h-4 w-4" />
-        </span>
-        <span className="hidden sm:inline">{signingIn ? "Signing in..." : "Sign In"}</span>
-      </button>
+      </div>
     )
   }
 
@@ -39,8 +45,12 @@ export function AccountControl({ className }: { className?: string }) {
         aria-haspopup="menu"
         aria-expanded={menuOpen}
       >
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
-          {user?.avatarInitial}
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground overflow-hidden">
+          {user?.pictureUrl ? (
+            <img src={user.pictureUrl} alt={user.name} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+          ) : (
+            user?.avatarInitial
+          )}
         </span>
         <span className="hidden max-w-[9rem] truncate sm:inline">{user?.name}</span>
       </button>
@@ -59,7 +69,8 @@ export function AccountControl({ className }: { className?: string }) {
           >
             <div className="border-b border-border px-4 py-3">
               <p className="truncate text-sm font-semibold text-foreground">{user?.name}</p>
-              <p className="truncate text-xs text-muted-foreground">{user?.email}</p>
+              {/* Optional: Only render email if it exists */}
+              {user?.email && <p className="truncate text-xs text-muted-foreground">{user.email}</p>}
             </div>
             <button
               type="button"

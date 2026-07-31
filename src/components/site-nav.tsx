@@ -46,9 +46,9 @@ export function SiteNav() {
       {/* Main bar */}
       <div className="mx-auto flex max-w-[1600px] items-center gap-4 px-4 py-3 lg:px-6">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label={`${STORE_INFO.name} home`}>
-          <img src="/brand/playtech-icon.png" alt="" className="h-9 w-9 shrink-0 object-contain" />
+          <img src="https://playtech.lk/uploads/brand/playtech-icon.png" alt="" className="h-9 w-9 shrink-0 object-contain" />
           <span className="hidden leading-tight sm:block">
-            <img src="/brand/playtech-logo.png" alt={STORE_INFO.name} className="h-5 w-auto object-contain" />
+            <img src="https://playtech.lk/uploads/brand/playtech-logo.png" alt={STORE_INFO.name} className="h-5 w-auto object-contain" />
             <span className="mt-1 block text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
               {STORE_INFO.tagline}
             </span>
@@ -88,7 +88,7 @@ export function SiteFooter() {
     <footer className="mt-8 border-t border-border bg-card/40">
       <div className="mx-auto flex max-w-[1600px] flex-col gap-2 px-4 py-6 text-sm text-muted-foreground lg:flex-row lg:items-center lg:justify-between lg:px-6">
         <p className="inline-flex items-center gap-2">
-          <img src="/brand/playtech-logo.png" alt={STORE_INFO.name} className="h-4 w-auto object-contain" />
+          <img src="https://playtech.lk/uploads/brand/playtech-logo.png" alt={STORE_INFO.name} className="h-4 w-auto object-contain" />
           <span>— {STORE_INFO.tagline}</span>
         </p>
         <p>{STORE_INFO.address}</p>

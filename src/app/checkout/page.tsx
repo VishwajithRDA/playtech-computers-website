@@ -3,11 +3,11 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import { CheckCircle2, ShieldCheck, Lock, PartyPopper } from "lucide-react"
-import { PRODUCTS, STORE_INFO } from "../../lib/catalog-data"
+import { PRODUCTS } from "../../lib/catalog-data"
+import { GoogleLogin } from "@react-oauth/google"
 import { formatLKR } from "../../lib/format"
 import { SiteNav, SiteFooter } from "../../components/site-nav"
 import { useAuth } from "../../components/auth-provider"
-import { GoogleIcon } from "../../components/google-icon"
 
 // Demo order — in a real app these line items would come from the shared cart.
 const ORDER_ITEMS = [
@@ -19,7 +19,8 @@ const ORDER_ITEMS = [
 const DELIVERY_FEE = 2500
 
 export default function CheckoutPage() {
-  const { isAuthenticated, user, signInWithGoogle, signingIn } = useAuth()
+  // Added 'ready' to ensure we wait for localStorage to load the auto-login session
+  const { isAuthenticated, user, verifyGoogleToken, signingIn, ready } = useAuth()
   const [confirmed, setConfirmed] = useState(false)
 
   const { subtotal, total } = useMemo(() => {
@@ -103,7 +104,12 @@ export default function CheckoutPage() {
 
           {/* Auth-gated action panel */}
           <aside className="flex flex-col gap-4">
-            {confirmed ? (
+            {!ready ? (
+              // Loading state while checking localStorage for auto-login
+              <div className="flex h-32 items-center justify-center rounded-xl border border-border bg-card">
+                <p className="text-sm text-muted-foreground animate-pulse">Loading session...</p>
+              </div>
+            ) : confirmed ? (
               <div className="flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-6 text-center">
                 <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <PartyPopper className="h-7 w-7" />
@@ -112,8 +118,7 @@ export default function CheckoutPage() {
                   Quotation requested!
                 </h2>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  Thanks {user?.name}. Our team will email your confirmed quotation to{" "}
-                  <span className="font-medium text-foreground">{user?.email}</span> shortly.
+                  Thanks {user?.name}. Our team will contact you to confirm stock.
                 </p>
                 <Link
                   href="/#catalog"
@@ -124,12 +129,28 @@ export default function CheckoutPage() {
               </div>
             ) : isAuthenticated ? (
               <>
-                {/* Authenticated success chip */}
-                <div className="flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3">
-                  <CheckCircle2 className="h-5 w-5 shrink-0 text-green-500" />
-                  <p className="text-sm font-medium text-green-400">
-                    Authenticated as: {user?.email}
-                  </p>
+                {/* Authenticated User Profile Chip */}
+                <div className="flex items-center gap-3 rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3">
+                  {user?.pictureUrl ? (
+                    <img
+                      src={user.pictureUrl}
+                      alt={user.name}
+                      className="h-10 w-10 shrink-0 rounded-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+                      {user?.avatarInitial}
+                    </span>
+                  )}
+                  <div className="flex flex-col min-w-0">
+                    <p className="flex items-center gap-1.5 text-xs font-medium text-green-500">
+                      <CheckCircle2 className="h-3.5 w-3.5" /> Authenticated
+                    </p>
+                    <p className="truncate font-display text-sm font-bold text-foreground">
+                      {user?.name}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="rounded-xl border border-border bg-card p-6">
@@ -171,24 +192,28 @@ export default function CheckoutPage() {
                     For your security, please sign in with Google before we finalize your order and
                     quotation request.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => void signInWithGoogle()}
-                    disabled={signingIn}
-                    className="mt-4 inline-flex h-12 w-full items-center justify-center gap-3 rounded-lg bg-foreground px-4 text-sm font-semibold text-background transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
+
+                  {/* Cleaned up Google Login wrapper to prevent HTML nesting issues */}
+                  <div className="mt-4 flex w-full justify-center">
                     {signingIn ? (
-                      "Signing in..."
+                      <div className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-foreground text-sm font-semibold text-background opacity-60">
+                        Authenticating...
+                      </div>
                     ) : (
-                      <>
-                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-background">
-                          <GoogleIcon />
-                        </span>
-                        Sign In with Google
-                      </>
+                      <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                          if (credentialResponse.credential) {
+                            void verifyGoogleToken(credentialResponse.credential)
+                          }
+                        }}
+                        onError={() => console.error("Google Login Failed")}
+                        theme="filled_black"
+                        shape="rectangular"
+                      />
                     )}
-                  </button>
-                  <p className="mt-3 text-xs text-muted-foreground">
+                  </div>
+
+                  <p className="mt-4 text-xs text-muted-foreground">
                     We never post anything or share your details.
                   </p>
                 </div>

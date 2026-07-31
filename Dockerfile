@@ -1,28 +1,43 @@
-# 🔧 Build Stage
-FROM node:20-alpine AS builder
+# 1. Base Image
+FROM node:20-alpine AS base
+
+# 2. Dependencies Stage
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# 3. Builder Stage
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-# 🚀 Run Stage
-FROM node:20-alpine
+# 4. Runner Stage (Production)
+FROM base AS runner
 WORKDIR /app
 
-# Copy built app
-COPY --from=builder /app ./
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
-# Ensure a writable cache location for ISR/prerender at runtime
-ENV NEXT_CACHE_DIR=/tmp/next-cache
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# (Optional) run as non-root for better security
-RUN addgroup -S app && adduser -S app -G app \
-  && mkdir -p /tmp/next-cache \
-  && chown -R app:app /app /tmp/next-cache
-USER app
+COPY --from=builder /app/public ./public
 
-# Next.js default is 3000; map host 8001->3000 like you already do
+# Copy standalone build output
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
 EXPOSE 3000
-ENV PORT=3000
-CMD ["npm", "start"]
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]

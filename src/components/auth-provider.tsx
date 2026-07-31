@@ -2,37 +2,24 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
 
-/**
- * Lightweight mock authentication.
- *
- * This simulates a Google OAuth session entirely on the client so the catalog
- * can demonstrate auth-gated flows (e.g. checkout) without a backend. The shape
- * of `AuthUser` mirrors what a real OAuth provider would return, so this can be
- * swapped for a real auth integration later without touching the UI.
- */
 export interface AuthUser {
   name: string
   email: string
   avatarInitial: string
+  pictureUrl?: string
 }
 
 interface AuthContextValue {
   user: AuthUser | null
   isAuthenticated: boolean
-  /** True until the persisted session has been read on mount. */
   ready: boolean
-  signInWithGoogle: () => Promise<void>
+  verifyGoogleToken: (token: string) => Promise<void>
   signOut: () => void
-  /** Whether an async sign-in is currently in flight. */
   signingIn: boolean
 }
 
 const STORAGE_KEY = "playtech.auth.user"
-const MOCK_USER: AuthUser = {
-  name: "Nimal Perera",
-  email: "customer@email.com",
-  avatarInitial: "N",
-}
+const TOKEN_KEY = "playtech.auth.token"
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
@@ -41,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
 
-  // Restore any persisted mock session on mount.
+  // Auto-login: Restores the persisted session on mount
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
@@ -52,23 +39,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setReady(true)
   }, [])
 
-  const signInWithGoogle = useCallback(async () => {
+  const verifyGoogleToken = useCallback(async (token: string) => {
     setSigningIn(true)
-    // Simulate the round-trip of an OAuth popup handshake.
-    await new Promise((resolve) => setTimeout(resolve, 900))
-    setUser(MOCK_USER)
+
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(MOCK_USER))
-    } catch {
-      // Ignore storage write failures.
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/google_user_login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      })
+
+      const data = await res.json()
+
+      // Ensure the backend returned a successful authentication
+      if (res.ok && data.isauth) {
+        // Map the specific response from your Node.js backend
+        const loggedInUser: AuthUser = {
+          name: data.username || "User",
+          email: "", // Backend currently doesn't return email, so leave empty
+          pictureUrl: data.picture_url,
+          avatarInitial: data.username ? data.username.charAt(0).toUpperCase() : "U",
+        }
+
+        setUser(loggedInUser)
+
+        // Save user profile and JWT to localStorage for auto-login
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(loggedInUser))
+        if (data.token) {
+          localStorage.setItem(TOKEN_KEY, data.token)
+        }
+      } else {
+        console.error("Server authentication failed:", data)
+      }
+    } catch (error) {
+      console.error("Login Error:", error)
+    } finally {
+      setSigningIn(false)
     }
-    setSigningIn(false)
   }, [])
 
   const signOut = useCallback(() => {
     setUser(null)
     try {
       localStorage.removeItem(STORAGE_KEY)
+      localStorage.removeItem(TOKEN_KEY)
     } catch {
       // Ignore storage failures.
     }
@@ -79,11 +95,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user,
       isAuthenticated: user !== null,
       ready,
-      signInWithGoogle,
+      verifyGoogleToken,
       signOut,
       signingIn,
     }),
-    [user, ready, signInWithGoogle, signOut, signingIn],
+    [user, ready, verifyGoogleToken, signOut, signingIn],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

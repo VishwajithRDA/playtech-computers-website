@@ -79,13 +79,13 @@ export function SiteHeader({
         {/* Logo */}
         <a href="/" className="flex shrink-0 items-center gap-2.5" aria-label={`${STORE_INFO.name} home`}>
           {/* <img
-            src="/brand/playtech-icon.png"
+            src="https://playtech.lk/uploads/brand/playtech-icon.png"
             alt=""
             className="h-9 w-9 shrink-0 object-contain"
           /> */}
           <span className="hidden leading-tight sm:block">
             <img
-              src="/brand/playtech-logo.png"
+              src="https://playtech.lk/uploads/brand/playtech-logo.png"
               alt={STORE_INFO.name}
               className="h-5 w-auto object-contain"
             />
